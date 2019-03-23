@@ -15,9 +15,24 @@ public class Booking {
     private String name;
     private String cpf;
     private String seat;
+    private Boolean confirmed;
 
     public Booking() {
 
+    }
+
+    /**
+     * @return the confirmed
+     */
+    public Boolean getConfirmed() {
+        return confirmed;
+    }
+
+    /**
+     * @param confirmed the confirmed to set
+     */
+    public void setConfirmed(Boolean confirmed) {
+        this.confirmed = confirmed;
     }
 
     /**
