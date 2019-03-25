@@ -41,39 +41,39 @@ public class Service {
      * This function picks and unpick and seat
      */
     @PutMapping("/pick")
-    public String pickSeat(@RequestBody Booking bk) throws Exception {
+    public Booking pickSeat(@RequestBody Booking bk) throws Exception {
         if (!(bk.getName().equals("") || bk.getCpf().equals("") || bk.getSeat().equals(""))) {
 
             Booking existent = repBookingData.findBySeat(bk.getSeat());
             if (existent == null) {
                 bk.setConfirmed(false);
                 repBookingData.save(bk);
-                return "Picked seat " + bk.getSeat();
+                return bk;
             } else {
                 repBookingData.delete(existent);
-                return "Unpicked seat " + bk.getSeat();
+                return null;
             }
         }
-        return "Error booking is missing data";
+        return null;
     }
 
     /**
      * This method confirms a reservation
      */
     @PutMapping("/confirm")
-    public String confirmReservation(@RequestBody Booking bk) throws Exception {
+    public Booking confirmReservation(@RequestBody Booking bk) throws Exception {
         if (!(bk.getName().equals("") || bk.getCpf().equals("") || bk.getSeat().equals(""))) {
 
-            Booking existent = repBookingData.findBySeat(bk.getSeat());
+            Booking existent = repBookingData.findByCpf(bk.getCpf());
             if (existent == null) {
-                return "Some error occurred, couldn't make the reservation " + bk.toString();
+                return null;
             } else {
                 existent.setConfirmed(true);
                 repBookingData.save(existent);
-                return "Confirmed seat " + existent.getSeat();
+                return existent;
             }
         }
-        return "Error booking is missing data";
+        return null;
     }
 
 }

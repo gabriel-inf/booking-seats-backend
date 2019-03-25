@@ -18,9 +18,25 @@ public class Booking {
     private Boolean confirmed;
     private String value;
     private String phone;
+    private String email;
 
     public Booking() {
 
+    }
+
+    
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param phone the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /**
