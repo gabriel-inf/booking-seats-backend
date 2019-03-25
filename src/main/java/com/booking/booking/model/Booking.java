@@ -16,9 +16,39 @@ public class Booking {
     private String cpf;
     private String seat;
     private Boolean confirmed;
+    private String value;
+    private String phone;
 
     public Booking() {
 
+    }
+
+    /**
+     * @return the phone
+     */
+    public String getPhone() {
+        return phone;
+    }
+
+    /**
+     * @param phone the phone to set
+     */
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    /**
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
+
+    /**
+     * @param value the value to set
+     */
+    public void setValue(String value) {
+        this.value = value;
     }
 
     /**
