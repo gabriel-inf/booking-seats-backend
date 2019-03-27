@@ -3,10 +3,15 @@ package com.booking.booking.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.Null;
+
 import com.booking.booking.model.Booking;
 import com.booking.booking.repository.BookingData;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JsonParseException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -38,23 +43,34 @@ public class Service {
     }
 
     /**
-     * This function picks and unpick and seat
+     * Oly one seat can be associated with a CPF if user has one seat piked but not
+     * confirmed, he can pick another but the current will be unpicked
+     * 
+     * @param bk
+     * @return
+     * @throws Exception
      */
     @PutMapping("/pick")
     public Booking pickSeat(@RequestBody Booking bk) throws Exception {
+
         if (!(bk.getName().equals("") || bk.getCpf().equals("") || bk.getSeat().equals(""))) {
 
-            Booking existent = repBookingData.findBySeat(bk.getSeat());
-            if (existent == null) {
-                bk.setConfirmed(false);
+            Booking seatCpfAssociated = repBookingData.findByCpf(bk.getCpf());
+            Booking seatLabelAssociated = repBookingData.findBySeat(bk.getSeat());
+
+            if (seatLabelAssociated == seatCpfAssociated && seatCpfAssociated != null) {
+                repBookingData.delete(seatCpfAssociated);
+            } else if (seatCpfAssociated != null && seatLabelAssociated == null) {
+                repBookingData.delete(seatCpfAssociated);
                 repBookingData.save(bk);
-                return bk;
-            } else {
-                repBookingData.delete(existent);
-                return null;
+            } else if (seatCpfAssociated == seatLabelAssociated && seatCpfAssociated == null) {
+                repBookingData.save(bk);
+            } else if (seatCpfAssociated == null && seatLabelAssociated != null) {
+                throw new Exception("SEAT_UNAVAILABLE");
             }
-        }
-        return null;
+            return bk;
+
+        } else throw new Exception("MISSING_INFO");
     }
 
     /**
@@ -72,8 +88,7 @@ public class Service {
                 repBookingData.save(existent);
                 return existent;
             }
-        }
-        return null;
+        } else throw new Exception("MISSING_INFO");
     }
 
 }
