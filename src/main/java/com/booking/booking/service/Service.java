@@ -3,15 +3,10 @@ package com.booking.booking.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.Null;
-
 import com.booking.booking.model.Booking;
 import com.booking.booking.repository.BookingData;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JsonParseException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -67,10 +62,16 @@ public class Service {
                 repBookingData.save(bk);
             } else if (seatCpfAssociated == null && seatLabelAssociated != null) {
                 throw new Exception("SEAT_UNAVAILABLE");
+            } else if (seatCpfAssociated != null && seatLabelAssociated != null
+                    && seatCpfAssociated != seatLabelAssociated) {
+                throw new Exception("SEAT_UNAVAILABLE");
+            } else {
+
             }
             return bk;
 
-        } else throw new Exception("MISSING_INFO");
+        } else
+            throw new Exception("MISSING_INFO");
     }
 
     /**
@@ -88,7 +89,8 @@ public class Service {
                 repBookingData.save(existent);
                 return existent;
             }
-        } else throw new Exception("MISSING_INFO");
+        } else
+            throw new Exception("MISSING_INFO");
     }
 
 }
