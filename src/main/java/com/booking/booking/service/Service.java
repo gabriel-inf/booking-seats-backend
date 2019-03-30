@@ -93,4 +93,13 @@ public class Service {
             throw new Exception("MISSING_INFO");
     }
 
+    @PutMapping("/reserveMultiple")
+    public void reserveMultiple(@RequestBody ArrayList<Booking> bk_list) throws Exception {
+        for (Booking element : bk_list) {
+            pickSeat(element);
+        }
+    }
+
+
+
 }
