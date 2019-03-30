@@ -33,7 +33,7 @@ public class SeatWatcher {
                     if (timeoutSchedule.get(bk.getSeat()) == null) {
                         timeoutSchedule.put(bk.getSeat(), 0);
                         System.out.println("Added seat " + bk.getSeat() + "to Watcher");
-                    } else if (timeoutSchedule.get(bk.getSeat()) > 12) {
+                    } else if (timeoutSchedule.get(bk.getSeat()) > 120) {
                         repBookingData.delete(bk);
                         timeoutSchedule.remove(bk.getSeat());
                         System.out.println("Remove seat " + bk.getSeat() + " from reserve and the Watcher");
