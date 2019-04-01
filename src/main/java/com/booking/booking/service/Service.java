@@ -115,7 +115,7 @@ public class Service {
     }
 
     @PutMapping("/deleteReservation")
-    public void delete(Booking bk) throws Exception {
+    public void delete(@RequestBody Booking bk) throws Exception {
         Booking found = this.repBookingData.findByCpf(bk.getCpf());
         if (found != null) {
             repBookingData.delete(found);
