@@ -100,6 +100,17 @@ public class Service {
         }
     }
 
-
+    /**
+     * This true if this cpf is locking a seat
+     */
+    @PutMapping("/checkCpfUsage")
+    public Boolean checkCpfUsage(@RequestBody String cpf) throws Exception {
+        Booking found = this.repBookingData.findByCpf(cpf);
+        if(found != null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 }
