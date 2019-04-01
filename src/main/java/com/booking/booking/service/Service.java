@@ -9,6 +9,7 @@ import com.booking.booking.repository.BookingData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -103,13 +104,28 @@ public class Service {
     /**
      * This true if this cpf is locking a seat
      */
-    @GetMapping("/checkCpfUsage")
-    public Boolean checkCpfUsage(@RequestBody String cpf) throws Exception {
+    @GetMapping("/checkCpfUsage/{cpf}")
+    public Boolean checkCpfUsage(@PathVariable String cpf) throws Exception {
         Booking found = this.repBookingData.findByCpf(cpf);
-        if(found != null) {
+        if (found != null) {
             return false;
         } else {
             return true;
+        }
+    }
+
+    @PutMapping("/deleteReservation")
+    public void delete(Booking bk) throws Exception {
+        Booking found = this.repBookingData.findByCpf(bk.getCpf());
+        if (found != null) {
+            repBookingData.delete(found);
+        } else {
+            Booking found2 = this.repBookingData.findBySeat(bk.getSeat());
+            if (found2 != null) {
+                repBookingData.delete(found2);
+            } else {
+                throw new Exception("RESERVATION_NOT_EXISTS");
+            }
         }
     }
 
